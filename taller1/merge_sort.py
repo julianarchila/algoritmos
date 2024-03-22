@@ -46,6 +46,7 @@ def merge(a: List[int], p:int, q:int, r:int) -> List[int]:
 
 
 def merge_sort(a: List[int], p:int, r:int) -> List[int]:
+
     if p < r:
         q = (p + r) // 2
         merge_sort(a, p, q)
