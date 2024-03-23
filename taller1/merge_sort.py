@@ -1,29 +1,23 @@
 from typing import List
 
-
 def merge(a: List[int], p:int, q:int, r:int) -> List[int]:
-    nl = q -p + 1
-    nr = r -1
+    nl = q - p + 1
+    nr = r - q
 
-    L : List[int] = []
-    R : List[int] = []
+    L = [0] * nl
+    R = [0] * nr
 
+    for i in range(nl):
+        L[i] = a[p+i]
 
-
-    for i in range(0, nl):
-        L.append(a[p+i])
-
-
-    for i in range(0, nr):
-        R.append(a[q+i+1])
-
+    for j in range(nr):
+        R[j] = a[q+j+1]
 
     i = 0
     j = 0
     k = p
 
-
-    while (i < nl and j < nr):
+    while i < nl and j < nr:
         if L[i] <= R[j]:
             a[k] = L[i]
             i += 1
@@ -44,13 +38,21 @@ def merge(a: List[int], p:int, q:int, r:int) -> List[int]:
 
     return a
 
-
-def merge_sort(a: List[int], p:int, r:int) -> List[int]:
-
+def _merge_sort(a: List[int], p:int, r:int) -> List[int]:
     if p < r:
         q = (p + r) // 2
-        merge_sort(a, p, q)
-        merge_sort(a, q+1, r)
+        _merge_sort(a, p, q)
+        _merge_sort(a, q+1, r)
         merge(a, p, q, r)
     return a
+
+def merge_sort(a: List[int]):
+    return _merge_sort(a, 0, len(a)-1)
+
+""" # Example usage:
+arr = [12, 11, 13, 5, 6, 7]
+n = len(arr)
+print("Given array is", arr)
+merge_sort(arr, 0, n-1)
+print("Sorted array is", arr) """
 

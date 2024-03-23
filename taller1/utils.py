@@ -38,7 +38,10 @@ def graph_results(res: List[dict], title: str, x_label: str = "n", y_label: str 
     plt.ylabel(y_label)
     plt.title(title)
     plt.savefig(title + ".png")
-    plt.show()
+
+    # clean up
+    plt.clf()
+    plt.cla()
 
 
 
@@ -57,12 +60,12 @@ def run_experiment(n: int, num_experiments: int, algorithm) -> float:
     for _ in range(num_experiments):
         arr = generate_random_array(n)
         start_time = time.time()
-        # algorithm(arr)
+        algorithm(arr)
 
-        if (algorithm.__name__ == "merge_sort"):
+        """ if (algorithm.__name__ == "merge_sort"):
             algorithm(arr, 0, len(arr) - 1)
         else:
-            algorithm(arr)
+            algorithm(arr) """
 
         end_time = time.time()
         times.append(end_time - start_time)
@@ -82,4 +85,34 @@ def run_test(algorithm, time = 300) -> List[dict]:
         n += 1
 
     return res
+
+
+#inputs should be something like: {"merge_sort": merge_sort_results, "insertion_sort": insertion_sort_results, ...}
+#outputs a graph comparing the results of all the algorithms
+#lines should be different colors, make sure to include a legend with the names of the algorithms
+def graph_results_merged(filePaths: List[str]) -> None:
+    #load the results from the files
+    import pandas as pd
+
+    names = [file.split("_")[0] for file in filePaths]
+
+    dfs = []
+    for file in filePaths:
+        dfs.append(pd.read_csv(file))
+
+    #plot the results
+    import matplotlib.pyplot as plt
+    for df in dfs:
+        plt.plot(df["n"], df["time"])
+    plt.xlabel("n")
+    plt.ylabel("time")
+    plt.title("All Results")
+    # plt.legend([df.columns[1] for df in dfs])
+    plt.legend(names)
+    plt.savefig("All Results.png")
+
+    #clean up
+
+    plt.clf()
+    plt.cla()
 
